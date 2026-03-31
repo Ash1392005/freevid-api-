@@ -1,8 +1,8 @@
 const instances = [
-  "https://api.piped.projectsegfau.lt",
-  "https://pipedapi.moomoo.me",
-  "https://piped-api.garudalinux.org",
-  "https://pipedapi.kavin.rocks"
+  "https://invidious.flokinet.to",
+  "https://yewtu.be",
+  "https://inv.vern.cc",
+  "https://invidious.io"
 ];
 
 export default async function handler(req, res) {
@@ -11,14 +11,14 @@ export default async function handler(req, res) {
 
   for (const url of instances) {
     try {
-      const response = await fetch(`${url}/trending?region=${region}`);
+      const response = await fetch(`${url}/api/v1/trending?region=${region}`, {
+        headers: { 'User-Agent': 'Mozilla/5.0' }
+      });
       if (response.ok) {
         const data = await response.json();
         return res.status(200).json(data);
       }
-    } catch (e) {
-      console.log(`Failed: ${url}`);
-    }
+    } catch (e) { console.log(`Failed: ${url}`); }
   }
-  res.status(500).json({ error: "All servers are down." });
+  res.status(500).json({ error: "Trending failed on all servers." });
 }
